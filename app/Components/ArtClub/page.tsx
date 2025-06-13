@@ -22,6 +22,9 @@ export default function Home() {
     const gotoArtLibrary = () => {
         router.push(`../../Components/ArtClub/Library`);
     };
+    const gotoClubNews = () => {
+        router.push(`../../Components/ArtClub/ClubNews`);
+    };
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen">
@@ -40,7 +43,7 @@ export default function Home() {
                         { icon: "globe", label: "Club Domain" },
                         { icon: "briefcase", label: "Club Affairs" },
                         { icon: "git-branch", label: "Club Chapters" },
-                        { icon: "newspaper", label: "Club News" },
+                        { icon: "newspaper", label: "Club News", id: "ClubNews"},
                         { icon: "award", label: "Hall of Fame" },
                         { icon: "image", label: "Gallery" },
                         { icon: "trophy", label: "Contests" },
@@ -51,6 +54,9 @@ export default function Home() {
                                 }
                                 if(item.id == "Library") {
                                     gotoArtLibrary()
+                                }
+                                if(item.id == "ClubNews") {
+                                    gotoClubNews()
                                 }
                              }} key={index} variant="ghost" className="w-full justify-start mb-1 font-normal">
                             <span className="mr-2" >

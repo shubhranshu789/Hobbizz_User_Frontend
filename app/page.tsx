@@ -25,7 +25,6 @@ export default function Page() {
       <button onClick={handleClick2}>Go to About</button> */}
 
 
-
       <ArtCub/>
     </div>
   );
