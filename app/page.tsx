@@ -1,6 +1,9 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
+import AllClubs from "./Components/AllClubs/page"
+import ArtCub from "./Components/ArtClub/page"
+
 
 export default function Page() {
   const router = useRouter();
@@ -17,9 +20,13 @@ export default function Page() {
 
   return (
     <div>
-      <h1>Welcome to the Main Page</h1>
+      {/* <h1>Welcome to the Main Page</h1>
       <button onClick={handleClick}>Go to Home</button>
-      {/* <button onClick={handleClick2}>Go to About</button> */}
+      <button onClick={handleClick2}>Go to About</button> */}
+
+
+
+      <ArtCub/>
     </div>
   );
 }
