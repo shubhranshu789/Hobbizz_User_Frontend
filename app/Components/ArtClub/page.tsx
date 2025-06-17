@@ -26,6 +26,9 @@ export default function Home() {
         router.push(`../../Components/ArtClub/ClubNews`);
     };
 
+    const gotoHeritage = () => {
+        router.push(`../../Components/ArtClub/Heritage`);
+    }
     const gotoHallOfFame = () => {
         router.push(`../../Components/ArtClub/HallOfFame`);
     };
@@ -43,7 +46,7 @@ export default function Home() {
                         { icon: "layout-grid", label: "Cabinet", id: "Cabinet" },
                         { icon: "scroll", label: "Constitution" },
                         { icon: "history", label: "Legacy" },
-                        { icon: "landmark", label: "Heritage" },
+                        { icon: "landmark", label: "Heritage" ,id: "Heritage" },
                         { icon: "calendar", label: "Calendar" },
                         { icon: "book", label: "Library" , id : "Library"},
                         { icon: "book-open", label: "Club Journal" },
@@ -58,6 +61,9 @@ export default function Home() {
                         <Button onClick={() => {
                                 if(item.id == "Cabinet") {
                                     gotoArtClub()
+                                }
+                                if(item.id == "Heritage") {
+                                    gotoHeritage()  
                                 }
                                 if(item.id == "Library") {
                                     gotoArtLibrary()
