@@ -4,6 +4,7 @@ import Image from "next/image"
 import { useState } from "react"
 
 export default function Gallery() {
+<<<<<<< HEAD
 
   // Gallery items with their categories
   const galleryItems = [
@@ -15,6 +16,28 @@ export default function Gallery() {
     //   category: "ancient",
     //   height: "h-[300px] md:h-[400px]",
     // },
+=======
+  const [activeTab, setActiveTab] = useState("all")
+
+  const tabs = [
+    { id: "all", label: "All" },
+    { id: "ancient", label: "Ancient Sites" },
+    { id: "modern", label: "Modern Art" },
+    { id: "others", label: "Others" },
+    { id: "vintage", label: "Vintage Art" },
+  ]
+
+  // Gallery items with their categories
+  const galleryItems = [
+    {
+      id: 1,
+      src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/d6/e9/d7/artclub-gallery-est-une.jpg?height=800&width=600",
+      alt: "Museum Interior",
+      title: "Natural History Museum",
+      category: "ancient",
+      height: "h-[300px] md:h-[400px]",
+    },
+>>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
     {
       id: 2,
       src: "https://sdg-migration-id.s3.amazonaws.com/thumbs_Interior-Design-American-Kennel-Club-Museum-of-the-Dog-New-York-04-0319.770x0_q95.jpg?height=1000&width=600",
@@ -82,6 +105,10 @@ export default function Gallery() {
   ]
 
   // Filter items based on active tab
+<<<<<<< HEAD
+=======
+  const filteredItems = activeTab === "all" ? galleryItems : galleryItems.filter((item) => item.category === activeTab)
+>>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
 
   return (
     <main className="min-h-screen bg-white">
@@ -108,6 +135,7 @@ export default function Gallery() {
           <h2 className="text-3xl md:text-4xl font-bold text-blue-900">From Our Gallery</h2>
         </div>
 
+<<<<<<< HEAD
 
 
         {/* Gallery Grid */}
@@ -127,8 +155,50 @@ export default function Gallery() {
               </div>
             </div>
           ))}
+=======
+        {/* Filter Tabs */}
+        <div className="w-full mb-12">
+          <div className="flex justify-center">
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+              {tabs.map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
+                  className={`px-4 py-2 rounded-md transition-colors ${
+                    activeTab === tab.id ? "bg-blue-600 text-white" : "bg-blue-50 text-blue-800 hover:bg-blue-100"
+                  }`}
+                >
+                  {tab.label}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Gallery Grid */}
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {filteredItems.map((item) => (
+              <div key={item.id} className={`relative overflow-hidden rounded-md cursor-pointer group ${item.height}`}>
+                <Image
+                  src={item.src || "/placeholder.svg"}
+                  alt={item.alt}
+                  fill
+                  className="object-cover transition-transform duration-500 group-hover:scale-110"
+                />
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-blue-900/60 transition-all duration-300 flex items-end opacity-0 group-hover:opacity-100">
+                  <div className="p-4 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
+                    <span className="text-white text-lg font-medium">{item.title}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+>>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
         </div>
       </div>
     </main>
   )
+<<<<<<< HEAD
 }
+=======
+}
+>>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a

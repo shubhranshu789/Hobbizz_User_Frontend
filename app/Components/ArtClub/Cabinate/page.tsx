@@ -11,7 +11,11 @@ export default function CabinetPage() {
         "Leading the club with 5+ years of experience in community building and event management. Passionate about fostering collaboration and growth among members.",
     },
     {
+<<<<<<< HEAD
       name: "James Rodriguez",
+=======
+      name: "Shubhranshuu",
+>>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
       role: "Chief Editor",
       image: "/placeholder.svg?height=150&width=150",
       description:
