@@ -8,7 +8,7 @@ import DraggableElement from "../ArtClub/files/draggable-element"
 import { useRouter } from 'next/navigation';
 
 
-// import "../../Components/ArtClub/Library"
+// import "../../Components/ArtClub/Gallery"
 
 
 export default function Home() {
@@ -35,6 +35,12 @@ export default function Home() {
     const gotoContest = () => {
         router.push(`../../Components/ArtClub/Contest`);
     };
+    const gotojournal = () => {
+        router.push(`/Components/ArtClub/ClubJournal`);
+    };
+    const gotoGallery = () => {
+        router.push(`/Components/ArtClub/Gallery`);
+    };
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen">
@@ -49,13 +55,13 @@ export default function Home() {
                         { icon: "landmark", label: "Heritage" ,id: "Heritage" },
                         { icon: "calendar", label: "Calendar" },
                         { icon: "book", label: "Library" , id : "Library"},
-                        { icon: "book-open", label: "Club Journal" },
+                        { icon: "book-open", label: "Club Journal" , id : "ClubJournal" },
                         { icon: "globe", label: "Club Domain" },
                         { icon: "briefcase", label: "Club Affairs" },
                         { icon: "git-branch", label: "Club Chapters" },
                         { icon: "newspaper", label: "Club News", id: "ClubNews"},
                         { icon: "award", label: "Hall of Fame", id:"HallOfFame"},
-                        { icon: "image", label: "Gallery" },
+                        { icon: "image", label: "Gallery" , id : "Gallery" },
                         { icon: "trophy", label: "Contests" , id: "Contest"},
                     ].map((item, index) => (
                         <Button onClick={() => {
@@ -76,6 +82,12 @@ export default function Home() {
                                 }
                                 if(item.id == "Contest") {
                                     gotoContest()
+                                }
+                                if(item.id == "ClubJournal") {
+                                    gotojournal()
+                                }
+                                if(item.id == "Gallery") {
+                                    gotoGallery()
                                 }
                              }} key={index} variant="ghost" className="w-full justify-start mb-1 font-normal">
                             <span className="mr-2" >

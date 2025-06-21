@@ -1,7 +1,23 @@
-import type { NextConfig } from "next";
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  images: {
+    domains: [
+      'dynamic-media-cdn.tripadvisor.com',
+      'cdn.prod.website-files.com',
+      'sdg-migration-id.s3.amazonaws.com',
+      'www.holidify.com',
+       'photos.hotelbeds.com',
+        'cdn.sanity.io',
+        'encrypted-tbn0.gstatic.com',
+        'rinewstoday.com',
+        'blogger.googleusercontent.com',
+        'media.architecturaldigest.com',
 
-const nextConfig: NextConfig = {
-  /* config options here */
+
+
+      // Add more domains as needed
+    ],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

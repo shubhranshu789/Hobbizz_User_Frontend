@@ -4,7 +4,7 @@ import Image from "next/image"
 import { useState } from "react"
 
 export default function Gallery() {
-  
+
   // Gallery items with their categories
   const galleryItems = [
     // {
@@ -82,7 +82,7 @@ export default function Gallery() {
   ]
 
   // Filter items based on active tab
- 
+
   return (
     <main className="min-h-screen bg-white">
       {/* Hero Section */}
@@ -108,10 +108,10 @@ export default function Gallery() {
           <h2 className="text-3xl md:text-4xl font-bold text-blue-900">From Our Gallery</h2>
         </div>
 
-       
 
-          {/* Gallery Grid */}
- <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+
+        {/* Gallery Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {galleryItems.map((item) => (
             <div key={item.id} className={`relative overflow-hidden rounded-md cursor-pointer group ${item.height}`}>
               <Image
