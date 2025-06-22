@@ -8,10 +8,8 @@ import DraggableElement from "../ArtClub/files/draggable-element"
 import { useRouter } from 'next/navigation';
 
 
-<<<<<<< HEAD
-=======
+
 // import "../../Components/ArtClub/Library"
->>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
 // import "../../Components/ArtClub/Gallery"
 
 
@@ -26,35 +24,18 @@ export default function Home() {
     const gotoArtLibrary = () => {
         router.push(`../../Components/ArtClub/Library`);
     };
-<<<<<<< HEAD
-    const gotoClubNews = () => {
-        router.push(`../../Components/ArtClub/ClubNews`);
-    };
-
-    const gotoHeritage = () => {
-        router.push(`../../Components/ArtClub/Heritage`);
-    }
-    const gotoHallOfFame = () => {
-        router.push(`../../Components/ArtClub/HallOfFame`);
-=======
     const gotoGallery = () => {
         router.push(`./../Components/ArtClub/Gallery`);
->>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
     };
     const gotoContest = () => {
         router.push(`../../Components/ArtClub/Contest`);
     };
-<<<<<<< HEAD
-    const gotojournal = () => {
-        router.push(`/Components/ArtClub/ClubJournal`);
-    };
-    const gotoGallery = () => {
-        router.push(`/Components/ArtClub/Gallery`);
-=======
      const gotoClubNews = () => {
         router.push(`../../Components/ArtClub/ClubNews`);
->>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
     };
+    const  gotoHallOfFame = () => {
+         router.push(`../../Components/ArtClub/HallOfFame`);
+    }
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen">
@@ -66,19 +47,6 @@ export default function Home() {
                         { icon: "layout-grid", label: "Cabinet", id: "Cabinet" },
                         { icon: "scroll", label: "Constitution" },
                         { icon: "history", label: "Legacy" },
-<<<<<<< HEAD
-                        { icon: "landmark", label: "Heritage" ,id: "Heritage" },
-                        { icon: "calendar", label: "Calendar" },
-                        { icon: "book", label: "Library" , id : "Library"},
-                        { icon: "book-open", label: "Club Journal" , id : "ClubJournal" },
-                        { icon: "globe", label: "Club Domain" },
-                        { icon: "briefcase", label: "Club Affairs" },
-                        { icon: "git-branch", label: "Club Chapters" },
-                        { icon: "newspaper", label: "Club News", id: "ClubNews"},
-                        { icon: "award", label: "Hall of Fame", id:"HallOfFame"},
-                        { icon: "image", label: "Gallery" , id : "Gallery" },
-                        { icon: "trophy", label: "Contests" , id: "Contest"},
-=======
                         { icon: "landmark", label: "Heritage" },
                         { icon: "calendar", label: "Calendar" },
                         { icon: "book", label: "Library" , id : "Library"},
@@ -87,48 +55,28 @@ export default function Home() {
                         { icon: "briefcase", label: "Club Affairs" },
                         { icon: "git-branch", label: "Club Chapters" },
                         { icon: "newspaper", label: "Club News", id: "ClubNews" },
-                        { icon: "award", label: "Hall of Fame" },
+                        { icon: "award", label: "Hall of Fame", id:"hallOfFame"},
                         { icon: "image", label: "Gallery", id: "Gallery"},
                         { icon: "trophy", label: "Contests", id: "Contest" },
->>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
                     ].map((item, index) => (
                         <Button onClick={() => {
                                 if(item.id == "Cabinet") {
                                     gotoArtClub()
                                 }
-<<<<<<< HEAD
-                                if(item.id == "Heritage") {
-                                    gotoHeritage()  
-                                }
-                                if(item.id == "Library") {
-                                    gotoArtLibrary()
-                                }
-                                if(item.id == "ClubNews") {
-                                    gotoClubNews()
-                                }
-                                if(item.id == "HallOfFame") {
-                                    gotoHallOfFame()
-=======
                                 if(item.id == "Library") {
                                     gotoArtLibrary()
                                 }
                                 if(item.id == "Gallery") {
                                     gotoGallery()
->>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
                                 }
                                 if(item.id == "Contest") {
                                     gotoContest()
                                 }
-<<<<<<< HEAD
-                                if(item.id == "ClubJournal") {
-                                    gotojournal()
-                                }
-                                if(item.id == "Gallery") {
-                                    gotoGallery()
-=======
                                 if(item.id == "ClubNews") {
                                     gotoClubNews()
->>>>>>> e0b5f0305757c4775e6567bb4b78c9e165bc9f8a
+                                }
+                                if(item.id == "hallOfFame") {
+                                    gotoHallOfFame()
                                 }
                              }} key={index} variant="ghost" className="w-full justify-start mb-1 font-normal">
                             <span className="mr-2" >
