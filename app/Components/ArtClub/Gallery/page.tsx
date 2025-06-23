@@ -1,163 +1,274 @@
-"use client"
+"use client";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
-import Image from "next/image"
-import { useState } from "react"
+const Gallery = () => {
+  const [images, setImages] = useState([]);
+  const [title, setTitle] = useState("");
+  const [selectedFile, setSelectedFile] = useState(null);
 
-export default function Gallery() {
-  const [activeTab, setActiveTab] = useState("all")
+  useEffect(() => {
+    fetchImages();
+  }, []);
 
-  const tabs = [
-    { id: "all", label: "All" },
-    { id: "ancient", label: "Ancient Sites" },
-    { id: "modern", label: "Modern Art" },
-    { id: "others", label: "Others" },
-    { id: "vintage", label: "Vintage Art" },
-  ]
+  // Fetch all images
+  const fetchImages = async () => {
+    try {
+      const res = await axios.get("http://localhost:5000/viewgallerypost");
+      setImages(res.data || []);
+    } catch (err) {
+      console.error("Error fetching images:", err);
+      toast.error("Error fetching images");
+    }
+  };
 
-  // Gallery items with their categories
-  const galleryItems = [
-    {
-      id: 1,
-      src: "https://dynamic-media-cdn.tripadvisor.com/media/photo-o/2b/d6/e9/d7/artclub-gallery-est-une.jpg?height=800&width=600",
-      alt: "Museum Interior",
-      title: "Natural History Museum",
-      category: "ancient",
-      height: "h-[300px] md:h-[400px]",
-    },
+  // Upload file to Cloudinary
+  const uploadToCloudinary = async () => {
+    if (!selectedFile) return null;
+    const data = new FormData();
+    data.append("file", selectedFile);
+    data.append("upload_preset", "hobbizz");
+    // data.append("cloud_name", "dvg17xl1iE");
 
-    {
-      id: 2,
-      src: "https://sdg-migration-id.s3.amazonaws.com/thumbs_Interior-Design-American-Kennel-Club-Museum-of-the-Dog-New-York-04-0319.770x0_q95.jpg?height=1000&width=600",
-      alt: "Museum Architecture",
-      title: "Museum Interior",
-      category: "ancient",
-      height: "h-[500px] md:row-span-2",
-    },
-    {
-      id: 3,
-      src: "https://www.holidify.com/images/cmsuploads/compressed/The_Arts_House_at_the_Old_Parliament_-_panoramio_20180524181301.jpg?height=800&width=600",
-      alt: "London Parliament",
-      title: "Houses of Parliament",
-      category: "vintage",
-      height: "h-[300px] md:h-[400px]",
-    },
-    {
-      id: 4,
-      src: "https://photos.hotelbeds.com/giata/bigger/99/992314/992314a_hb_a_002.jpg?height=800&width=600",
-      alt: "Colosseum",
-      title: "Colosseum",
-      category: "ancient",
-      height: "h-[300px] md:h-[400px]",
-    },
-    {
-      id: 5,
-      src: "https://cdn.sanity.io/images/cctd4ker/production/fc460c2783c573bd0904b742d433178a4cc8856d-5120x2880.jpg?height=800&width=600",
-      alt: "Sculpture",
-      title: "Classical Sculpture",
-      category: "ancient",
-      height: "h-[300px] md:h-[400px]",
-    },
-    {
-      id: 6,
-      src: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe_VyVn--cYv-_dWn1OkWsdt_YhHLxpociwvHBdZHGemco3n5IGmm9CuFAbzWW8A325Jc&usqp=CAU?height=800&width=600",
-      alt: "City Street",
-      title: "Paris Street",
-      category: "others",
-      height: "h-[300px] md:h-[400px]",
-    },
-    {
-      id: 7,
-      src: "https://rinewstoday.com/wp-content/uploads/2023/10/Screen-Shot-2023-10-30-at-11.18.14-AM-1024x975.png?height=800&width=600",
-      alt: "Museum Hall",
-      title: "Museum Hall",
-      category: "vintage",
-      height: "h-[300px] md:h-[400px]",
-    },
-    {
-      id: 8,
-      src: "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjivae0hfOfM9ASNHlhggqIGpVz8Wtz-H7LDW3XLpKJry-vlGIptE3Mc2TnmvaMBAlqJiwA_qaoaEGvT9BvHZKZ9JHzrcE0yj5GeRxVbZuyPcPHDZcsDT743jsmLWwDTXRoNSravvRhBVyKRs8/s1600/PalladioChiswickLondon.jpg?height=800&width=600",
-      alt: "Classical Architecture",
-      title: "Classical Architecture",
-      category: "ancient",
-      height: "h-[300px] md:h-[400px]",
-    },
-    {
-      id: 9,
-      src: "https://media.architecturaldigest.com/photos/55e76762cd709ad62e8e8d4e/master/pass/dam-images-architecture-2015-09-university-art-museums-university-art-museums-01.jpg?height=800&width=600",
-      alt: "Art Gallery",
-      title: "Modern Gallery",
-      category: "modern",
-      height: "h-[300px] md:h-[400px]",
-    },
-  ]
+    try {
+      const res = await fetch(
+        "https://api.cloudinary.com/v1_1/dvg17xl1i/image/upload",
+        { method: "POST", body: data }
+      );
 
-  // Filter items based on active tab
-  const filteredItems = activeTab === "all" ? galleryItems : galleryItems.filter((item) => item.category === activeTab)
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error.message);
+      }
+
+      const result = await res.json();
+      console.log("Cloudinary response:", result);
+      return result.secure_url;
+    } catch (error) {
+      console.error("Error uploading to Cloudinary:", error);
+      toast.error(`Upload failed: ${error.message}`);
+      return null;
+    }
+  };
+
+  // Add image to DB
+  const addImage = async (e: { preventDefault: () => void }) => {
+    e.preventDefault();
+
+    if (!title || !selectedFile) {
+      toast.error("Title & image are required");
+      return;
+    }
+
+    const uploadedUrl = await uploadToCloudinary();
+    if (!uploadedUrl) return;
+
+    try {
+      const res = await axios.post("http://localhost:5000/gallerypost", {
+        title,
+        imageUrl: uploadedUrl,
+      });
+
+      console.log("New image data:", res.data.data);
+      setImages((prev) => [res.data.data, ...prev]);
+      setTitle("");
+      setSelectedFile(null);
+      toast.success("Image Added Successfully!");
+    } catch (err) {
+      console.error("Error adding image to DB:", err);
+      toast.error("Error saving image to DB");
+    }
+  };
 
   return (
-    <main className="min-h-screen bg-white">
-      {/* Hero Section */}
-      <div className="relative h-[300px] md:h-[400px] w-full">
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="https://cdn.prod.website-files.com/644064e781b532845d5d8cec/652581987e77601a480d137c_DSC04635.JPG?height=800&width=1920"
-            alt="Gallery Hero"
-            fill
-            className="object-cover brightness-50"
-            priority
-          />
+    <div className= "padding: 2px" >
+      <header className="border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
+            {" "}
+            <div className="flex items-center">
+              <h1 className="text-xl font-bold text-gray-900">Club Gallery</h1>
+            </div>
+            <nav className="hidden md:flex space-x-8">
+              <a href="#" className="text-black-500 hover:text-black-800">
+                Cabinet
+              </a>
+              <a href="#" className="text-black-500 hover:text-black-800">
+                Constitution
+              </a>
+              <a href="#" className="text-black-500 hover:text-black-800">
+                Legacy
+              </a>
+              <a href="#" className="text-black-500 hover:text-black-800">
+                Heritage
+              </a>
+              <a href="#" className="text-black-500 hover:text-black-800">
+                Calendar
+              </a>
+              <a href="#" className="text-black-500 hover:text-black-800">
+                Library
+              </a>
+              <a href="#" className="text-black-500 hover:text-black-800">
+                Journal
+              </a>
+            </nav>
+          </div>
         </div>
-        <div className="relative z-10 flex flex-col items-center justify-center h-full text-white text-center px-4">
-          <h1 className="text-4xl md:text-5xl font-bold mb-2">Gallery</h1>
+      </header>
+
+      <div className="h-[300px] flex flex-col justify-center items-center text-center">
+        <h1 className="text-4xl font-extrabold text-gray-800 mb-2">
+          Club Gallery
+        </h1>
+        <p className="text-md sm:text-lg text-gray-700 max-w-xl">
+          Explore our collection of memories, achievements, and creative works
+          from club events, exhibitions, and activities throughout the years.
+        </p>
+      </div>
+
+      <h1 className="text-3xl font-bold mb-6 text-center text-blue-600">
+        Upload Image
+      </h1>
+
+      {/*  Form Section */}
+      <div className="max-w-xl mx-auto bg-white p-6 rounded-lg shadow-lg mb-10">
+        <form onSubmit={addImage} className="space-y-4">
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Title:
+            </label>
+            <input
+              className="border w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              placeholder="e.g. Beautiful Sunrise"
+              required
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700 font-medium mb-1">
+              Upload image file:
+            </label>
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setSelectedFile(e.target.files?.[0] || null)}
+              className="border w-full p-3 rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
+              required
+            />
+          </div>
+          <button
+            type="submit"
+            className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full shadow-md w-full transition duration-200 cursor-pointer"
+          >
+            Add to Gallery
+          </button>
+        </form>
+      </div>
+
+      {/* Gallery Images */}
+      <div className="min-h-screen p-8">
+        {/* <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">🎨 Art Gallery</h1> */}
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-7xl mx-auto">
+          {images.map((img) => (
+            <div
+              key={img._id}
+              className="overflow-hidden rounded-sm shadow-xl hover:scale-105 transition transform duration-300"
+            >
+              <img
+                src={img.imageUrl}
+                alt={img.title}
+                className="w-full h-60 object-cover"
+              />
+              <h2 className="text-center font-medium bg-white py-2 text-gray-800 truncate">
+                {img.title}
+              </h2>
+            </div>
+          ))}
         </div>
       </div>
 
-      {/* Gallery Section */}
-      <div className="container mx-auto px-4 py-16">
-        <div className="flex flex-col items-center mb-12">
-          <span className="text-sm text-blue-600 mb-2">Our Great Work</span>
-          <h2 className="text-3xl md:text-4xl font-bold text-blue-900">From Our Gallery</h2>
-        </div>
-
-        {/* Filter Tabs */}
-        <div className="w-full mb-12">
-          <div className="flex justify-center">
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
-              {tabs.map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  className={`px-4 py-2 rounded-md transition-colors ${
-                    activeTab === tab.id ? "bg-blue-600 text-white" : "bg-blue-50 text-blue-800 hover:bg-blue-100"
-                  }`}
-                >
-                  {tab.label}
-                </button>
-              ))}
+      <div>
+        {/* Footer */}
+        <footer className="bg-slate-800 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Club Gallery</h3>
+                <p className="text-gray-300 text-sm">
+                  Fostering creativity and artistic expression through community
+                  engagement and education.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-md font-semibold mb-4">Quick Links</h4>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Cabinet
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Constitution
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Legacy
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Heritage
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-md font-semibold mb-4">Resources</h4>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Calendar
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Library
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Journal
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      News
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-md font-semibold mb-4">Contact</h4>
+                <p className="text-gray-300 text-sm">artclub@school.edu</p>
+              </div>
+            </div>
+            <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+              <div className="flex justify-center items-center space-x-4">
+              </div>
             </div>
           </div>
-
-          {/* Gallery Grid */}
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredItems.map((item) => (
-              <div key={item.id} className={`relative overflow-hidden rounded-md cursor-pointer group ${item.height}`}>
-                <Image
-                  src={item.src || "/placeholder.svg"}
-                  alt={item.alt}
-                  fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-black/0 group-hover:bg-blue-900/60 transition-all duration-300 flex items-end opacity-0 group-hover:opacity-100">
-                  <div className="p-4 w-full transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                    <span className="text-white text-lg font-medium">{item.title}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+        </footer>
       </div>
-    </main>
-  )
-}
 
+      <ToastContainer position="top-center" autoClose={2000} />
+    </div>
+  );
+};
+
+export default Gallery;
