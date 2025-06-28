@@ -1,7 +1,18 @@
 "use client"
 
+
+
+type Submission = {
+  _id: string
+  title: string
+  contest: string
+  description: string
+  imageUrl: string
+}
+
 import type React from "react"
-import { useState } from "react"
+import { useState, useEffect , useRef} from "react"
+import axios from "axios"
 import { Trophy, Plus, Users, Award, Upload, Medal, Download, ChevronLeft, ChevronRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/app/Components/ArtClub/Contest/badge"
@@ -12,9 +23,41 @@ import { Textarea } from "@/app/Components/ArtClub/Contest/textarea"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/app/Components/ArtClub/Contest/select"
 import { Avatar, AvatarFallback, AvatarImage } from "@/app/Components/ArtClub/Contest/avatar"
 
+
+
 export default function HomePage() {
   const [dragActive, setDragActive] = useState(false)
+  const [submissions, setSubmissions] = useState<Submission[]>([])
+  const [contest, setContest] = useState("")
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [file, setFile] = useState<File | null>(null)
+  const fileInputRef = useRef<HTMLInputElement | null>(null)
+  const [previewUrl, setPreviewUrl] = useState<string | null>(null)
 
+  // ✅ useEffect must be here, outside return
+  useEffect(() => {
+    return () => {
+      if (previewUrl) {
+        URL.revokeObjectURL(previewUrl);
+      }
+    };
+  }, [previewUrl]);
+
+
+
+const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFile = e.target.files?.[0] || null;
+    setFile(selectedFile);
+
+    if (selectedFile && selectedFile.type.startsWith("image/")) {
+      const imageURL = URL.createObjectURL(selectedFile);
+      setPreviewUrl(imageURL);
+    } else {
+      setPreviewUrl(null);
+    }
+  };
+  
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault()
     e.stopPropagation()
@@ -31,6 +74,38 @@ export default function HomePage() {
     setDragActive(false)
     // Handle file drop logic here
   }
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!contest || !title || !description || !file) {
+      alert("All fields are required")
+      return
+    }
+    const formData = new FormData()
+    formData.append("contest", contest)
+    formData.append("title", title)
+    formData.append("description", description)
+    formData.append("file", file)
+    try {
+      const res = await axios.post("http://localhost:5000/contest", formData)
+      alert("Submitted successfully!")
+      setSubmissions((prev) => [...prev, res.data.data])
+    } catch (err) {
+      console.error("Error submitting entry", err)
+      alert("Submission failed")
+    }
+  }
+
+  useEffect(() => {
+    const fetchSubmissions = async () => {
+      try {
+        const res = await axios.get("http://localhost:5000/contest")
+        setSubmissions(res.data.data)
+      } catch (err) {
+        console.error("Failed to fetch submissions", err)
+      }
+    }
+    fetchSubmissions()
+  }, [])
 
   const scrollToSection = (sectionId: string) => {
     document.getElementById(sectionId)?.scrollIntoView({ behavior: "smooth" })
@@ -281,89 +356,116 @@ export default function HomePage() {
       </section>
 
       {/* Submit Entry Section */}
-      <section id="submit" className="py-16 px-4 bg-white">
-        <div className="max-w-4xl mx-auto">
-          <div className="text-center mb-12">
+      <div className="text-center mb-12">
             <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Submit Your Entry</h2>
             <p className="text-lg text-gray-600">Upload your artwork and join the competition</p>
           </div>
+  <form onSubmit={handleSubmit} className="max-w-xl mx-auto mt-12 space-y-6">
+  {/* Contest Selection */}
+  <div>
+    <Label htmlFor="contest" className="text-base font-medium">
+      Contest Selection
+    </Label>
+    <Select onValueChange={setContest}>
+      <SelectTrigger className="h-12 mt-2 transition-all duration-200 hover:border-sky-300">
+        <SelectValue placeholder="Select contest" />
+      </SelectTrigger>
+      <SelectContent>
+        <SelectItem value="Digital Art Masterpiece">Digital Art Masterpiece</SelectItem>
+        <SelectItem value="Photography Challenge">Photography Challenge</SelectItem>
+        <SelectItem value="Traditional Art Revival">Traditional Art Revival</SelectItem>
+      </SelectContent>
+    </Select>
+  </div>
 
-          <Card className="shadow-lg border-0 transition-all duration-300 hover:shadow-xl">
-            <CardContent className="p-8">
-              <form className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
-                    <Label htmlFor="contest" className="text-base font-medium">
-                      Contest Selection
-                    </Label>
-                    <Select>
-                      <SelectTrigger className="h-12 transition-all duration-200 hover:border-sky-300">
-                        <SelectValue placeholder="Digital Art Masterpiece" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="digital-art">Digital Art Masterpiece</SelectItem>
-                        <SelectItem value="photography">Photography Challenge</SelectItem>
-                        <SelectItem value="traditional">Traditional Art Revival</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+  {/* Entry Title */}
+  <div>
+    <Label htmlFor="title" className="text-base font-medium">
+      Entry Title
+    </Label>
+    <Input
+      id="title"
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      placeholder="Give your artwork a title"
+      className="h-12 mt-2 transition-all duration-200 hover:border-sky-300 focus:border-sky-400"
+    />
+  </div>
 
-                  <div className="space-y-2">
-                    <Label htmlFor="title" className="text-base font-medium">
-                      Entry Title
-                    </Label>
-                    <Input
-                      id="title"
-                      placeholder="Give your artwork a title"
-                      className="h-12 transition-all duration-200 hover:border-sky-300 focus:border-sky-400"
-                    />
-                  </div>
-                </div>
+  {/* Description */}
+  <div>
+    <Label htmlFor="description" className="text-base font-medium">
+      Description
+    </Label>
+    <Textarea
+      id="description"
+      value={description}
+      onChange={(e) => setDescription(e.target.value)}
+      placeholder="Describe your artwork and inspiration"
+      className="min-h-32 mt-2 resize-none transition-all duration-200 hover:border-sky-300 focus:border-sky-400"
+    />
+  </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="description" className="text-base font-medium">
-                    Description
-                  </Label>
-                  <Textarea
-                    id="description"
-                    placeholder="Describe your artwork and inspiration"
-                    className="min-h-32 resize-none transition-all duration-200 hover:border-sky-300 focus:border-sky-400"
-                  />
-                </div>
+  {/* File Upload with Preview */}
+  <div>
+    <Label className="text-base font-medium">Upload Artwork</Label>
+    <div
+      className={`mt-2 border-2 border-dashed rounded-lg p-12 text-center transition-all duration-200 cursor-pointer ${
+        dragActive
+          ? "border-sky-400 bg-sky-50 scale-105"
+          : "border-gray-300 hover:border-gray-400 hover:scale-102"
+      }`}
+      onClick={() => fileInputRef.current?.click()}
+      onDragEnter={handleDrag}
+      onDragLeave={handleDrag}
+      onDragOver={handleDrag}
+      onDrop={handleDrop}
+    >
+      <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
+      <p className="text-lg text-gray-600 mb-2">
+        Drag and drop your file here, or click to browse
+      </p>
+      <p className="text-sm text-gray-500">Supports: JPG, PNG, PDF (Max 10MB)</p>
 
-                <div className="space-y-2">
-                  <Label className="text-base font-medium">Upload Artwork</Label>
-                  <div
-                    className={`border-2 border-dashed rounded-lg p-12 text-center transition-all duration-200 cursor-pointer ${
-                      dragActive
-                        ? "border-sky-400 bg-sky-50 scale-105"
-                        : "border-gray-300 hover:border-gray-400 hover:scale-102"
-                    }`}
-                    onDragEnter={handleDrag}
-                    onDragLeave={handleDrag}
-                    onDragOver={handleDrag}
-                    onDrop={handleDrop}
-                  >
-                    <Upload className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-                    <p className="text-lg text-gray-600 mb-2">Drag and drop your file here, or click to browse</p>
-                    <p className="text-sm text-gray-500">Supports: JPG, PNG, PDF (Max 10MB)</p>
-                  </div>
-                </div>
+      <Input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*,application/pdf"
+        onChange={(e) => {
+          const selectedFile = e.target.files?.[0] || null
+          setFile(selectedFile)
+          if (selectedFile && selectedFile.type.startsWith("image/")) {
+            const preview = URL.createObjectURL(selectedFile)
+            setPreviewUrl(preview)
+          } else {
+            setPreviewUrl(null)
+          }
+        }}
+        className="hidden"
+      />
 
-                
-
-                <Button
-                  type="submit"
-                  className="w-full bg-sky-400 hover:bg-sky-500 text-white py-4 text-lg rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg"
-                >
-                  <Upload className="w-5 h-5 mr-2" />
-                  Submit Entry
-                </Button>
-              </form>
-            </CardContent>
-          </Card>
+      {previewUrl && (
+        <div className="mt-6">
+          <p className="text-gray-600 mb-2">Image Preview:</p>
+          <img
+            src={previewUrl}
+            alt="Preview"
+            className="max-w-xs mx-auto rounded border border-gray-300 shadow"
+          />
         </div>
-      </section>
+      )}
+    </div>
+  </div>
+
+  {/* Submit Button */}
+  <Button
+    type="submit"
+    className="w-full bg-sky-400 hover:bg-sky-500 text-white py-4 text-lg rounded-full transition-all duration-200 hover:scale-105 hover:shadow-lg"
+  >
+    <Upload className="w-5 h-5 mr-2" />
+    Submit Entry
+  </Button>
+</form>
 
       {/* Contest Results Section */}
       <section id="results" className="py-16 px-4">
