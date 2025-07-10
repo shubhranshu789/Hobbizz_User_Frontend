@@ -28,8 +28,8 @@ export default function Page() {
       <button onClick={handleClick2}>Go to About</button> */}
 
 
-      {/* <DanceClub/> */}
-      <ArtCub/>
+      <DanceClub/>
+      {/* <ArtCub/> */}
       {/* <Auth/> */}
     </div>
   );
