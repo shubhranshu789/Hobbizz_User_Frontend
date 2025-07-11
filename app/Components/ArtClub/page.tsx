@@ -10,6 +10,7 @@ import DraggableElement from "../ArtClub/files/draggable-element"
 import { useRouter } from 'next/navigation';
 
 
+
 // import "../../Components/ArtClub/Library"
 // import "../../Components/ArtClub/Gallery"
 
@@ -34,6 +35,9 @@ export default function Home() {
      const gotoClubNews = () => {
         router.push(`../../Components/ArtClub/ClubNews`);
     };
+    const  gotoHallOfFame = () => {
+         router.push(`../../Components/ArtClub/HallOfFame`);
+    }
 
     return (
         <div className="flex flex-col md:flex-row min-h-screen">
@@ -53,7 +57,7 @@ export default function Home() {
                         { icon: "briefcase", label: "Club Affairs" },
                         { icon: "git-branch", label: "Club Chapters" },
                         { icon: "newspaper", label: "Club News", id: "ClubNews" },
-                        { icon: "award", label: "Hall of Fame" },
+                        { icon: "award", label: "Hall of Fame", id:"hallOfFame"},
                         { icon: "image", label: "Gallery", id: "Gallery"},
                         { icon: "trophy", label: "Contests", id: "Contest" },
                     ].map((item, index) => (
@@ -72,6 +76,9 @@ export default function Home() {
                                 }
                                 if(item.id == "ClubNews") {
                                     gotoClubNews()
+                                }
+                                if(item.id == "hallOfFame") {
+                                    gotoHallOfFame()
                                 }
                              }} key={index} variant="ghost" className="w-full justify-start mb-1 font-normal">
                             <span className="mr-2" >

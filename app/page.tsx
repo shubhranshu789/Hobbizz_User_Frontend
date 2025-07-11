@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import ArtCub from "./Components/ArtClub/page"
+
 import DanceClub from "./Components/DanceClub/page"
 import Auth from "./Components/Auth/page"
 import WelcomePage from "../app/HobbizzWelcomePage/page"
@@ -27,10 +28,16 @@ export default function Page() {
       <button onClick={handleClick2}>Go to About</button> */}
 
 
+<<<<<<< HEAD
         {/* <DanceClub/> */}
       {/* <Auth/> */}
 
       <WelcomePage/>
+=======
+      <DanceClub/>
+      {/* <ArtCub/> */}
+      {/* <Auth/> */}
+>>>>>>> 78288a6bf9084f2af66cd4dc8e4479b568de42c0
     </div>
   );
 }

@@ -224,8 +224,90 @@ const ClubNewsForm = () => {
       </div>
 
       <div>
+<<<<<<< HEAD
         {/* Footer */}
         <Footer/>
+=======
+        {/* Footer  -> This is a Fotter*/ } 
+        <footer className="bg-slate-800 text-white">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+              <div>
+                <h3 className="text-lg font-semibold mb-4">Art Club</h3>
+                <p className="text-gray-300 text-sm">
+                  Fostering creativity and artistic expression through community
+                  engagement and education.
+                </p>
+              </div>
+              <div>
+                <h4 className="text-md font-semibold mb-4">Quick Links</h4>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Cabinet
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Constitution
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Legacy
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Heritage
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-md font-semibold mb-4">Resources</h4>
+                <ul className="space-y-2 text-sm">
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Calendar
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Library
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      Journal
+                    </a>
+                  </li>
+                  <li>
+                    <a href="#" className="text-gray-300 hover:text-white">
+                      News
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div>
+                <h4 className="text-md font-semibold mb-4">Contact</h4>
+                <p className="text-gray-300 text-sm">artclub@school.edu</p>
+              </div>
+            </div>
+            <div className="border-t border-gray-700 mt-8 pt-8 text-center">
+              <div className="flex justify-center items-center space-x-4">
+                {/* <button className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+                <ChevronLeft className="w-4 h-4" />
+              </button> */}
+                {/* <span className="text-sm">1 / 2</span> */}
+                {/* <button className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center">
+                <ChevronRight className="w-4 h-4" />
+              </button> */}
+              </div>
+            </div>
+          </div>
+        </footer>
+>>>>>>> 78288a6bf9084f2af66cd4dc8e4479b568de42c0
       </div>
 
       <ToastContainer position="top-center" autoClose={2000} />

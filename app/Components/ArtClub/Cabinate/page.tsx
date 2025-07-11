@@ -11,6 +11,7 @@ export default function CabinetPage() {
         "Leading the club with 5+ years of experience in community building and event management. Passionate about fostering collaboration and growth among members.",
     },
     {
+
       name: "Shubhranshuu",
       role: "Chief Editor",
       image: "/placeholder.svg?height=150&width=150",
